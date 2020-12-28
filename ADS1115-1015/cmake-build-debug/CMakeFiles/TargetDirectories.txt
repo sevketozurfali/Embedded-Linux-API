@@ -1,0 +1,3 @@
+/home/so/gitHub/Embedded-Linux-API/ADS1115-1015/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/so/gitHub/Embedded-Linux-API/ADS1115-1015/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/so/gitHub/Embedded-Linux-API/ADS1115-1015/cmake-build-debug/CMakeFiles/ADS1115_1015.dir
