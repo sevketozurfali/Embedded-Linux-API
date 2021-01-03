@@ -8,15 +8,16 @@ int main() {
 
     exp_max7321* expMax7321;
 
+
+
     unsigned long address;
     char i2c_filename[1024];
     debug("Please enter i2c device file name : ");
     scanf("%s", &i2c_filename);
-    strcpy(expMax7321->filename, i2c_filename);
     debug("Please enter i2c device address : ");
     scanf("%.2lX", &address );
 
-    expMax7321 = expMax7321_init(expMax7321->filename, expMax7321->address);
+    expMax7321 = expMax7321_init(i2c_filename, address);
 
     int mode;
     debug("How would you like to use this IO Expander ?");
