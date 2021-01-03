@@ -1,14 +1,64 @@
 #include "libs/max7321.h"
 
+void mode_input(exp_max7321* expMax7321);
+void mode_output(exp_max7321* expMax7321);
+
 int main() {
     debug("Welcome to I2C Expander (MAX7321) Test Software");
 
     exp_max7321* expMax7321;
 
-    expMax7321 = expMax7321_init("/dev/i2c-1", 0x21);
+    unsigned long address;
+    char i2c_filename[1024];
+    debug("Please enter i2c device file name : ");
+    scanf("%s", &i2c_filename);
+    strcpy(expMax7321->filename, i2c_filename);
+    debug("Please enter i2c device address : ");
+    scanf("%.2lX", &address );
 
+    expMax7321 = expMax7321_init(expMax7321->filename, expMax7321->address);
+
+    int mode;
+    debug("How would you like to use this IO Expander ?");
+    debug("");
+    debug("As an INPUT --> Press 0");
+    debug("As an OUTPUT --> Press 1");
+    scanf("%d", &mode);
+
+    switch (mode) {
+        case 0:
+            mode_input(expMax7321);
+            break;
+        case 1:
+            mode_output(expMax7321);
+            break;
+        default:
+            break;
+    }
+    return 0;
+}
+
+void mode_input(exp_max7321* expMax7321){
+
+    unsigned long input_value = expMax7321_readBus(expMax7321);
+    unsigned long temp = 0;
+    while(true){
+         temp = expMax7321_readBus(expMax7321);
+         if(temp != input_value){
+             printf("input data : %.2lX\n", input_value);
+             input_value = temp;
+             sleep(0.5);
+         }
+    }
+
+
+}
+
+void mode_output(exp_max7321* expMax7321){
     int selection, custom_value;
-    debug("Please select one of the section which is defined in the below (exit -> 0) : ");
+    debug("Please select one of the section which is defined in the below (exit -> 99) : ");
+
+    debug("0 : Send 0x00 command.");
     debug("1 : Send 0x01 command.");
     debug("2 : Send 0x03 command.");
     debug("3 : Send 0x07 command.");
@@ -21,8 +71,8 @@ int main() {
     debug("10 : Just read command.");
 
 
-    scanf("%d", selection);
-    printf("You selected : %d", selection);
+    scanf("%d", &selection);
+    printf("You selected : %d\n", selection);
 
 
     unsigned long one_io[] = {0x01};
@@ -36,12 +86,14 @@ int main() {
     unsigned long custom_io[] = {0x00};
     unsigned long read_io[] = {0};
     if(selection == 9){
+        debug("Please type custom command : ");
+        scanf("%.2lX", &custom_value);
         custom_io[0] = custom_value;
     }
 
 
     switch (selection) {
-        case 0:
+        case 99:
             break;
         case 1:
             expMax7321_writeBus(expMax7321, one_io);
@@ -77,6 +129,4 @@ int main() {
             break;
 
     }
-
-    return 0;
 }

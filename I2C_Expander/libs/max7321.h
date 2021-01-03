@@ -16,6 +16,8 @@
 #include <string.h>
 #include <fcntl.h>
 #include <zconf.h>
+#include <stdbool.h>
+
 
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
