@@ -1,58 +1,18 @@
 #include "libs/max7321.h"
 
-void mode_input(exp_max7321* expMax7321);
-void mode_output(exp_max7321* expMax7321);
-
-int main() {
-    debug("Welcome to I2C Expander (MAX7321) Test Software");
-
-    exp_max7321* expMax7321;
-
-
-
-    unsigned long address;
-    char i2c_filename[1024];
-    debug("Please enter i2c device file name : ");
-    scanf("%s", &i2c_filename);
-    debug("Please enter i2c device address : ");
-    scanf("%.2lX", &address );
-
-    expMax7321 = expMax7321_init(i2c_filename, address);
-
-    int mode;
-    debug("How would you like to use this IO Expander ?");
-    debug("");
-    debug("As an INPUT --> Press 0");
-    debug("As an OUTPUT --> Press 1");
-    scanf("%d", &mode);
-
-    switch (mode) {
-        case 0:
-            mode_input(expMax7321);
-            break;
-        case 1:
-            mode_output(expMax7321);
-            break;
-        default:
-            break;
-    }
-    return 0;
-}
 
 void mode_input(exp_max7321* expMax7321){
 
     unsigned long input_value = expMax7321_readBus(expMax7321);
     unsigned long temp = 0;
     while(true){
-         temp = expMax7321_readBus(expMax7321);
-         if(temp != input_value){
-             printf("input data : %.2lX\n", input_value);
-             input_value = temp;
-             sleep(0.5);
-         }
+        temp = expMax7321_readBus(expMax7321);
+        if(temp != input_value){
+            printf("input data : %.2lX\n", input_value);
+            input_value = temp;
+            sleep(0.5);
+        }
     }
-
-
 }
 
 void mode_output(exp_max7321* expMax7321){
@@ -131,3 +91,40 @@ void mode_output(exp_max7321* expMax7321){
 
     }
 }
+
+int main() {
+    debug("Welcome to I2C Expander (MAX7321) Test Software");
+
+    exp_max7321* expMax7321;
+
+
+
+    unsigned long address;
+    char i2c_filename[1024];
+    debug("Please enter i2c device file name : ");
+    scanf("%s", &i2c_filename);
+    debug("Please enter i2c device address : ");
+    scanf("%lu", &address );
+
+    expMax7321 = expMax7321_init(i2c_filename, address);
+
+    int mode;
+    debug("How would you like to use this IO Expander ?");
+    debug("");
+    debug("As an INPUT --> Press 1");
+    debug("As an OUTPUT --> Press 2");
+    scanf("%d", &mode);
+
+    switch (mode) {
+        case 1:
+            mode_input(expMax7321);
+            break;
+        case 2:
+            mode_output(expMax7321);
+            break;
+        default:
+            break;
+    }
+    return 0;
+}
+
